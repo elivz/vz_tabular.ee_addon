@@ -15,9 +15,7 @@ class Vz_tabular {
     public $return_data;
     protected $formats_path;
 
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         // Require Composer's autoloader
@@ -36,7 +34,7 @@ class Vz_tabular {
      * Uses magic function to allow new formats to be easily added
      *
      * @access public
-     * @param string     $name The method name being called or context if third tagpart
+     * @param string     $name The method name being called
      * @param array      $arguments The method call arguments
      * @return void
      */
@@ -46,23 +44,35 @@ class Vz_tabular {
         $filename = ee()->TMPL->fetch_param('filename', FALSE);
         $stop_processing = ee()->TMPL->fetch_param('stop_processing', FALSE);
 
-        // Include the export format
+        // Include the export format class
         $export_format = 'Vz_tabular_' . $name;
         $format_file = $this->formats_path . $export_format . EXT;
         if (!file_exists($format_file))
         {
-            ee()->TMPL->log_item("ERROR: VZ Tabular does not support the $name format");
+            ee()->TMPL->log_item('ERROR: VZ Tabular does not support ' . $name . ' format');
             return;
         }
         require_once $format_file;
         $this->export_format = new $export_format;
-        ee()->TMPL->log_item("VZ Tabular: Exporting to " . $export_format );
+        ee()->TMPL->log_item('VZ Tabular: Exporting to ' . $this->export_format->name );
+
+        // Make sure the selected format can be output in the chosen method
+        if ($filename && !$this->export_format->supports_output('file'))
+        {
+            ee()->TMPL->log_item('ERROR: VZ Tabular cannot save ' . $this->export_format->name . ' format to a file');
+            return;
+        }
+        elseif (!$filename && !$this->export_format->supports_output('browser'))
+        {
+            ee()->TMPL->log_item('ERROR: VZ Tabular cannot display ' . $this->export_format->name . ' format in the browser');
+            return;
+        }
 
         // Get the data array
         $data = $this->_get_data_array();
         if (!is_array($data) || count($data) < 1)
         {
-            ee()->TMPL->log_item("ERROR: VZ Tabular could not parse the template.");
+            ee()->TMPL->log_item('ERROR: VZ Tabular could not parse the template.');
             return;
         }
 
@@ -72,46 +82,28 @@ class Vz_tabular {
 
         if ($filename)
         {
-            if ($this->export_format->supports_output('file')) {
-                $filename = $this->_sanitize_filename($filename);
+            $filename = $this->_sanitize_filename($filename);
 
-                // Stream the file to the browser
-                ee()->load->helper('download');
-                force_download($filename, $output);
+            // Stream the file to the browser
+            ee()->load->helper('download');
+            force_download($filename, $output);
 
-                ee()->TMPL->log_item("VZ Tabular: Streaming file \"$filename\" to browser");
-            }
-            else
-            {
-                ee()->TMPL->log_item("ERROR: VZ Tabular cannot save $name format to a file");
-            }
+            ee()->TMPL->log_item('VZ Tabular: Streaming file "' . $filename . '" to browser');
         }
         elseif ($stop_processing)
         {
-            if ($this->export_format->supports_output('browser')) {
-                ee()->TMPL->log_item("VZ Tabular: Displaying data on the page and cancelling further template parsing");
+            ee()->TMPL->log_item('VZ Tabular: Displaying data on the page and cancelling further template parsing');
 
-                // Output to the screen and stop all further template processing
-                echo $output;
-                exit;
-            }
-            else
-            {
-                ee()->TMPL->log_item("ERROR: VZ Tabular cannot display $name format in the browser");
-            }
+            // Output to the screen and stop all further template processing
+            echo $output;
+            exit;
         }
         else
         {
-            if ($this->export_format->supports_output('browser')) {
-                ee()->TMPL->log_item("VZ Tabular: Displaying data on the page");
+            ee()->TMPL->log_item('VZ Tabular: Displaying data on the page');
 
-                // Output to the screen
-                return $output;
-            }
-            else
-            {
-                ee()->TMPL->log_item("ERROR: VZ Tabular cannot display $name format in the browser");
-            }
+            // Output to the screen
+            return $output;
         }
     }
 
@@ -132,7 +124,6 @@ class Vz_tabular {
             $matches
         );
         $columns = array_unique($matches[1]);
-        ee()->TMPL->log_item("VZ Tabular: Determined column headings");
 
         if (!empty($columns))
         {
@@ -163,13 +154,13 @@ class Vz_tabular {
                 }
             }
 
-            ee()->TMPL->log_item("VZ Tabular: Parsed " . count($data) . " rows of data");
-            ee()->TMPL->log_item('VZ Tabular: Found these columns: ' . implode(', ', array_keys($data[0])));
+            ee()->TMPL->log_item('VZ Tabular: Found ' . count($data[0]) . ' columns: ' . implode(', ', array_keys($data[0])));
+            ee()->TMPL->log_item('VZ Tabular: Parsed ' . count($data) . ' rows of data');
 
             return $data;
         }
 
-        ee()->TMPL->log_item("VZ Tabular: No columns were detected in the template");
+        ee()->TMPL->log_item('VZ Tabular: No columns were detected in the template');
 
         return false;
     }

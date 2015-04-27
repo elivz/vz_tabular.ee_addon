@@ -13,6 +13,8 @@
 class Vz_tabular_csv extends Vz_tabular_format
 {
 
+    public $name = 'CSV';
+
     // 'parameter' => 'default'
     protected $params = array(
         'delimiter' => ',',

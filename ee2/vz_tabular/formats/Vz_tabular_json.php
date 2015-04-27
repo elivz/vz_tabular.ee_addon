@@ -13,6 +13,8 @@
 class Vz_tabular_json extends Vz_tabular_format
 {
 
+    public $name = 'JSON';
+
     // 'parameter' => 'default'
     protected $params = array(
         'pretty' => 'no',

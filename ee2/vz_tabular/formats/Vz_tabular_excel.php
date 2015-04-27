@@ -15,7 +15,9 @@ use \XLSXWriter;
 class Vz_tabular_excel extends Vz_tabular_format
 {
 
-    public $ouput = array('file');
+    public $name = 'Excel';
+
+    public $output = array('file');
 
     // 'parameter' => 'default'
     protected $params = array(

@@ -10,8 +10,12 @@
  * @link        http://elivz.com
  */
 
+use \DomDocument;
+
 class Vz_tabular_xml extends Vz_tabular_format
 {
+
+    public $name = 'XML';
 
     // 'parameter' => 'default'
     protected $params = array(

@@ -13,7 +13,8 @@
 abstract class Vz_tabular_format
 {
 
-    public $ouput = array('browser', 'file');
+    public $name = '';
+    public $output = array('browser', 'file');
     protected $params = array();
 
 
@@ -36,7 +37,7 @@ abstract class Vz_tabular_format
      */
     public function supports_output($output)
     {
-        return isset($this->output[$output]);
+        return in_array($output, $this->output);
     }
 
 
