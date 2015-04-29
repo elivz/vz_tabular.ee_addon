@@ -10,9 +10,21 @@
  * @link        http://elivz.com
  */
 
+
+$plugin_info = array(
+    'pi_name'         => 'VZ Tabular',
+    'pi_version'      => '0.9',
+    'pi_author'       => 'Eli Van Zoeren',
+    'pi_author_url'   => 'http://elivz.com/',
+    'pi_description'  => 'Formats tabular data in a variety of ways',
+    'pi_usage'        => Vz_tabular::usage(),
+);
+
+
 class Vz_tabular {
 
     public $return_data;
+
     protected $formats_path;
 
 
@@ -77,7 +89,7 @@ class Vz_tabular {
         }
 
         // Generate the output string
-        $output = trim($this->export_format->output($data));
+        $output = $this->export_format->output($data);
         ee()->TMPL->log_item("VZ Tabular: Output generated");
 
         if ($filename)
@@ -119,7 +131,7 @@ class Vz_tabular {
     {
         // Get the column names
         preg_match_all(
-            '#' . LD . 'col:' . '(.*?)' . RD . '#s',
+            '#' . LD . 'col:' . '(.*?)' . RD . '.*' . LD . '/col:\1' . RD . '#s',
             ee()->TMPL->tagdata,
             $matches
         );
@@ -150,7 +162,7 @@ class Vz_tabular {
                         $matches
                     );
 
-                    $data[$i][$column] = trim($matches[1]);
+                    $data[$i][$column] = isset($matches[1]) ? trim($matches[1]) : '';
                 }
             }
 
@@ -178,6 +190,28 @@ class Vz_tabular {
         $invalid_chars = array('<', '>', '?', '"', ':', '|', '\\', '/', '*', '&');
         $all_invalids = array_merge($nonprinting,$invalid_chars);
         return str_replace($all_invalids, '', $filename);
+    }
+
+    /**
+     * Usage
+     *
+     * This function describes how the plugin is used.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function usage()
+    {
+        ob_start();  ?>
+
+Documentation here.....
+
+
+    <?php
+        $buffer = ob_get_contents();
+        ob_end_clean();
+
+        return $buffer;
     }
 
 }

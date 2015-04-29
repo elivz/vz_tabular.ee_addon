@@ -22,9 +22,9 @@ class Vz_tabular_table extends Vz_tabular_format
     // 'parameter' => 'default'
     protected $params = array(
         'esc_html' => 'no',
-        'headers' => 'yes',
-        'id'     => false,
-        'class'  => false,
+        'headers'  => 'yes',
+        'id'       => false,
+        'class'    => false,
     );
 
 
@@ -38,7 +38,9 @@ class Vz_tabular_table extends Vz_tabular_format
     public function output($data)
     {
         // Generate the result
-        $html = '<table>' . NL;
+        $table_attrs  = $this->params['id'] ? ' id="' . $this->params['id'] . '"' : '';
+        $table_attrs .= $this->params['class'] ? ' class="' . $this->params['class'] . '"' : '';
+        $html = '<table' . $table_attrs . '>' . NL;
 
         if ($this->params['headers'] == 'yes')
         {

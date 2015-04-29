@@ -19,9 +19,10 @@ class Vz_tabular_xml extends Vz_tabular_format
 
     // 'parameter' => 'default'
     protected $params = array(
-        'pretty'  => 'no',
-        'root'    => 'root',
-        'element' => 'element',
+        'esc_html' => 'yes',
+        'root'     => 'root',
+        'element'  => 'element',
+        'pretty'   => 'no',
     );
 
 
@@ -44,7 +45,17 @@ class Vz_tabular_xml extends Vz_tabular_format
 
             foreach ($row as $column => $value)
             {
-                $cell = $xml->createElement($column, $value);
+                if ($this->params['esc_html'] == 'yes')
+                {
+                    $content = $xml->createTextNode($value);
+                }
+                else
+                {
+                    $content = $xml->createCDATASection($value);
+                }
+
+                $cell = $xml->createElement($column);
+                $cell->appendChild($content);
                 $item->appendChild($cell);
             }
 

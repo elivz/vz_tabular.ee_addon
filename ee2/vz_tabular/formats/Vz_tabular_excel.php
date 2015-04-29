@@ -42,13 +42,14 @@ class Vz_tabular_excel extends Vz_tabular_format
         {
             $headers[$cell] = 'string';
         }
-        $writer->writeSheetHeader($this->params['sheet'], $headers);
 
         // Write each row of data to the file
-        foreach ($data as $row)
+        foreach ($data as $key => $row)
         {
-            $writer->writeSheetRow($this->params['sheet'], array_values($row));
+            $data[$key] = array_values($row);
         }
+
+        $writer->writeSheet($data, $this->params['sheet'], $headers);
 
         return $writer->writeToString();
     }
