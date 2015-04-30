@@ -19,7 +19,7 @@ class Vz_tabular_xml extends Vz_tabular_format
 
     // 'parameter' => 'default'
     protected $params = array(
-        'esc_html' => 'yes',
+        'esc_html' => 'no',
         'root'     => 'root',
         'element'  => 'element',
         'pretty'   => 'no',
@@ -54,7 +54,7 @@ class Vz_tabular_xml extends Vz_tabular_format
                     $content = $xml->createCDATASection($value);
                 }
 
-                $cell = $xml->createElement($column);
+                $cell = $xml->createElement(str_replace(' ', '_', $column));
                 $cell->appendChild($content);
                 $item->appendChild($cell);
             }
@@ -67,7 +67,7 @@ class Vz_tabular_xml extends Vz_tabular_format
         if ($this->params['pretty'] == 'yes')
         {
             // Add indentation
-            $xml->formatOutput = true;
+            $xml->formatOutput = TRUE;
         }
 
         return $xml->saveXML();

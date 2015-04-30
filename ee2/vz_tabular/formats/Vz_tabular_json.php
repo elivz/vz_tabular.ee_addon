@@ -30,7 +30,7 @@ class Vz_tabular_json extends Vz_tabular_format
      */
     public function output($data)
     {
-        $json_options = $this->params['pretty'] == 'yes' ? JSON_PRETTY_PRINT : null;
+        $json_options = $this->params['pretty'] == 'yes' ? JSON_PRETTY_PRINT : NULL;
 
         $output = json_encode($data, $json_options);
         return $output;

@@ -22,9 +22,10 @@ class Vz_tabular_table extends Vz_tabular_format
     // 'parameter' => 'default'
     protected $params = array(
         'esc_html' => 'no',
+        'tab'      => '    ',
         'headers'  => 'yes',
-        'id'       => false,
-        'class'    => false,
+        'id'       => FALSE,
+        'class'    => FALSE,
     );
 
 
@@ -37,6 +38,8 @@ class Vz_tabular_table extends Vz_tabular_format
      */
     public function output($data)
     {
+        $tab = $this->params['tab'];
+
         // Generate the result
         $table_attrs  = $this->params['id'] ? ' id="' . $this->params['id'] . '"' : '';
         $table_attrs .= $this->params['class'] ? ' class="' . $this->params['class'] . '"' : '';
@@ -44,38 +47,38 @@ class Vz_tabular_table extends Vz_tabular_format
 
         if ($this->params['headers'] == 'yes')
         {
-            $html .= '<thead><tr>' . NL;
+            $html .= $tab . '<thead><tr>' . NL;
 
             foreach (array_keys($data[0]) as $column)
             {
-                $html .= '<th>' . $column . '</th>' . NL;
+                $html .= $tab . $tab . '<th>' . $column . '</th>' . NL;
             }
 
-            $html .= '</tr></thead>' . NL;
+            $html .= $tab . '</tr></thead>' . NL;
         }
 
-        $html .= '<tbody' . NL;
+        $html .= $tab .  '<tbody' . NL;
 
         foreach ($data as $row)
         {
-            $html .= '<tr>' . NL;
+            $html .= $tab . $tab. '<tr>' . NL;
 
             foreach ($row as $column => $value)
             {
                 if ($this->params['esc_html'] == 'yes')
                 {
-                    $html .= '<td>' . htmlspecialchars($value) . '</td>' . NL;
+                    $html .= $tab . $tab . $tab . '<td>' . htmlspecialchars($value) . '</td>' . NL;
                 }
                 else
                 {
-                    $html .= '<td>' . $value . '</td>' . NL;
+                    $html .= $tab . $tab . $tab . '<td>' . $value . '</td>' . NL;
                 }
             }
 
-            $html .= '</tr>' . NL;
+            $html .= $tab . $tab . '</tr>' . NL;
         }
 
-        $html .= '</tbody>' . NL;
+        $html .= $tab . '</tbody>' . NL;
         $html .= '</table>' . NL;
 
         return $html;

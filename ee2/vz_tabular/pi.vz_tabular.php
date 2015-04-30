@@ -69,20 +69,20 @@ class Vz_tabular {
         ee()->TMPL->log_item('VZ Tabular: Exporting to ' . $this->export_format->name );
 
         // Make sure the selected format can be output in the chosen method
-        if ($filename && !$this->export_format->supports_output('file'))
+        if ($filename && !$this->export_format->supportsOutput('file'))
         {
             ee()->TMPL->log_item('ERROR: VZ Tabular cannot save ' . $this->export_format->name . ' format to a file');
             return;
         }
-        elseif (!$filename && !$this->export_format->supports_output('browser'))
+        elseif (!$filename && !$this->export_format->supportsOutput('browser'))
         {
             ee()->TMPL->log_item('ERROR: VZ Tabular cannot display ' . $this->export_format->name . ' format in the browser');
             return;
         }
 
         // Get the data array
-        $data = $this->_get_data_array();
-        if (!is_array($data) || count($data) < 1)
+        $data = $this->GetDataArray();
+        if (!is_array($data) OR count($data) < 1)
         {
             ee()->TMPL->log_item('ERROR: VZ Tabular could not parse the template.');
             return;
@@ -94,7 +94,7 @@ class Vz_tabular {
 
         if ($filename)
         {
-            $filename = $this->_sanitize_filename($filename);
+            $filename = $this->sanitizeFilename($filename);
 
             // Stream the file to the browser
             ee()->load->helper('download');
@@ -127,7 +127,7 @@ class Vz_tabular {
      * @access protected
      * @return array
      */
-    protected function _get_data_array()
+    protected function getDataArray()
     {
         // Get the column names
         preg_match_all(
@@ -174,7 +174,7 @@ class Vz_tabular {
 
         ee()->TMPL->log_item('VZ Tabular: No columns were detected in the template');
 
-        return false;
+        return FALSE;
     }
 
     /**
@@ -184,7 +184,7 @@ class Vz_tabular {
      * @param string     $filename Filename to sanitize
      * @return string
      */
-    protected function _sanitize_filename($filename)
+    protected function sanitizeFilename($filename)
     {
         $nonprinting = array_map('chr', range(0,31));
         $invalid_chars = array('<', '>', '?', '"', ':', '|', '\\', '/', '*', '&');

@@ -35,7 +35,7 @@ abstract class Vz_tabular_format
      * @param string  $output Output method to test
      * @return bool
      */
-    public function supports_output($output)
+    public function supportsOutput($output)
     {
         return in_array($output, $this->output);
     }
