@@ -1,15 +1,24 @@
 VZ Tabluar
 ==========
 
-VZ Tabular is an ExpressionEngine plugin that provides a simple method to output tabular data from the templates.
+VZ Tabular is an ExpressionEngine plugin that provides a simple method to output tabular data from the templates. Five ouput formats are currently supported: [CSV](#csv), [JSON](#json), [XML](#xml), [HTML Table](#html-table), & [Excel](#excel).
+
+Some possible use-cases include: creating a simple read-only API, endpoints for AJAX operations, and exporting data for transfer to another system. Get creative!
+
+Usage
+-----
+
+The tag pair should be wrapped around a looping tag, such as `channel:entries` or a Grid field. Within that loop, each column for output is wrapped in `{col Heading} ... {/col}`, with "Heading" being the title for that column. Depending on the output format, you can usually include spaces in the column heading (XML does not support spaces).
+
+If you have problems getting the output you want, turn on Template Debugging. VZ Tabular outputs detailed information about its process, and any problems that occur.
 
 ### Example:
 
     {exp:vz_tabular:csv}
         {exp:channel:entries channel="news" limit="10"}
-            {col:Title}{title}{/col:Title}
-            {col:Publish Date}{entry_date format="%Y-%m-%d"}{/col:Publish Date}
-            {col:Body}{body_text}{/col:Body}
+            {col Title}{title}{/col}
+            {col Publish Date}{entry_date format="%Y-%m-%d"}{/col}
+            {col Body}{body_text}{/col}
         {/exp:channel:entries}
     {/exp:vz_tabular:csv}
 
@@ -19,7 +28,7 @@ Output Formats
 
 ### CSV
 
-    {exp:vz_tabular:csv}
+    {exp:vz_tabular:csv} ... {/exp:vz_tabular:csv}
 
 #### Sample Output
 
@@ -37,7 +46,7 @@ Output Formats
 
 ### JSON
 
-    {exp:vz_tabular:json pretty="yes"}
+    {exp:vz_tabular:json pretty="yes"} ... {/exp:vz_tabular:json}
 
 #### Sample Output
 
@@ -58,12 +67,12 @@ Output Formats
 
 * `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
 * `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
-* `pretty` - Indent the JSON code for easier readability. Default: `no`.
+* `pretty` - Indent the JSON code for easier readability. *Requires PHP 5.4+*. Default: `no`.
 
 
 ### XML
 
-    {exp:vz_tabular:xml}
+    {exp:vz_tabular:xml} ... {/exp:vz_tabular:xml}
 
 #### Sample Output
 
@@ -95,7 +104,7 @@ Output Formats
 
 ### Excel
 
-    {exp:vz_tabular:excel filename="spreadsheet.xlsx"}
+    {exp:vz_tabular:excel filename="spreadsheet.xlsx"} ... {/exp:vz_tabular:excel}
 
 #### Parameters
 
@@ -103,9 +112,9 @@ Output Formats
 * `sheet` - Name of the worksheet. Default: `Sheet1`
 
 
-### Table
+### HTML Table
 
-    {exp:vz_tabular:table}
+    {exp:vz_tabular:table} ... {/exp:vz_tabular:table}
 
 #### Sample Output
 
@@ -136,3 +145,15 @@ Output Formats
 * `headers` - Include a header row with the column names. Default: `yes`
 * `id` - Sets an ID on the table element. Default: none
 * `class` - Sets a class on the table element. Default: none
+
+Support
+-------
+
+Please post any questions or problems in the [Devot:ee support forum](https://devot-ee.com/add-ons/support/vz-tabular/viewforum).
+
+VZ Tabular uses a modular adapter system for output formats, so if there is another format that would be useful to you, please tell me! 
+
+Changelog
+---------
+
+* __1.0.0__: Initial public release.

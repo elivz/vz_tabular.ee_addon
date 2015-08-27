@@ -21,13 +21,40 @@ $plugin_info = array(
 );
 
 
-class Vz_tabular {
+class Vz_tabular
+{
 
+    /**
+     * Template output
+     * @var string
+     */
     public $return_data;
 
+    /**
+     * Server path where output formats are stored
+     * @var string
+     */
     protected $formats_path;
 
+    /**
+     * Array of column data
+     * array(
+     *     array('title' => '', 'esc' => false)
+     * )
+     * @var array
+     */
+    protected $columns = array();
 
+    /**
+     * Two-dimensional array of parsed data
+     * @var array
+     */
+    protected $data = array();
+
+
+    /**
+     * Class constructor
+     */
     public function __construct()
     {
         // Require Composer's autoloader
@@ -81,100 +108,107 @@ class Vz_tabular {
         }
 
         // Get the data array
-        $data = $this->GetDataArray();
-        if (!is_array($data) OR count($data) < 1)
+        if ($this->GetDataArray())
         {
-            ee()->TMPL->log_item('ERROR: VZ Tabular could not parse the template.');
-            return;
-        }
+            // Generate the output string
+            $output = $this->export_format->output($this->data);
+            ee()->TMPL->log_item("VZ Tabular: Output generated");
 
-        // Generate the output string
-        $output = $this->export_format->output($data);
-        ee()->TMPL->log_item("VZ Tabular: Output generated");
+            if ($filename)
+            {
+                ee()->TMPL->log_item('VZ Tabular: Streaming file "' . $filename . '" to browser');
 
-        if ($filename)
-        {
-            $filename = $this->sanitizeFilename($filename);
+                $filename = $this->sanitizeFilename($filename);
 
-            // Stream the file to the browser
-            ee()->load->helper('download');
-            force_download($filename, $output);
+                // Stream the file to the browser
+                ee()->load->helper('download');
+                force_download($filename, $output);
+            }
+            elseif ($stop_processing)
+            {
+                ee()->TMPL->log_item('VZ Tabular: Displaying data on the page and cancelling further template parsing');
 
-            ee()->TMPL->log_item('VZ Tabular: Streaming file "' . $filename . '" to browser');
-        }
-        elseif ($stop_processing)
-        {
-            ee()->TMPL->log_item('VZ Tabular: Displaying data on the page and cancelling further template parsing');
+                // Output to the screen and stop all further template processing
+                echo $output;
+                exit;
+            }
+            else
+            {
+                ee()->TMPL->log_item('VZ Tabular: Displaying data on the page');
 
-            // Output to the screen and stop all further template processing
-            echo $output;
-            exit;
-        }
-        else
-        {
-            ee()->TMPL->log_item('VZ Tabular: Displaying data on the page');
-
-            // Output to the screen
-            return $output;
+                // Output to the screen
+                return $output;
+            }
         }
     }
 
 
     /**
      * Parse the template into an associative array
-     * Set each column using a {col:Title}{/col:Title} pair
+     * Set each column using a {col Title} ... {/col} pair
      *
      * @access protected
-     * @return array
+     * @return bool
      */
     protected function getDataArray()
     {
         // Get the column names
         preg_match_all(
-            '#' . LD . 'col:' . '(.*?)' . RD . '.*' . LD . '/col:\1' . RD . '#s',
+            '#' . LD . 'col ((.+?)( esc)?)' . RD . '.*?' . LD . '/col' . RD . '#s',
             ee()->TMPL->tagdata,
             $matches
         );
-        $columns = array_unique($matches[1]);
 
-        if (!empty($columns))
+        $columnTitles = array_unique($matches[2]);
+        foreach ($columnTitles as $key => $column)
+        {
+            $this->columns[$key]['tag'] = $matches[1][$key];
+            $this->columns[$key]['title'] = $column;
+            $this->columns[$key]['esc'] = $matches[3][$key] !== '';
+        }
+
+        if (!empty($columnTitles))
         {
             // Generate a random string to delimit rows with
             $uid = uniqid();
 
             // Split the template into rows
-            $first_key = 'col:' . $columns[0];
-            ee()->TMPL->tagdata = str_replace(LD . $first_key . RD, $uid . LD . $first_key . RD, ee()->TMPL->tagdata);
+            $first_key = 'col ' . $columnTitles[0];
+            ee()->TMPL->tagdata = str_replace(LD . $first_key, $uid . LD . $first_key, ee()->TMPL->tagdata);
 
             // Get an array of rows, remove first element which will be empty
             $rows = explode($uid, ee()->TMPL->tagdata);
             array_shift($rows);
 
-            // Break out the individual rows and columns
-            $data = array();
+            // Break out the individual rows and columnTitles
             foreach ($rows as $i => $row)
             {
-                foreach ($columns as $column)
+                foreach ($this->columns as $column)
                 {
                     preg_match(
-                        '#' . LD . 'col:' . $column . RD . '(.*)' . LD . '/col:' . $column . RD . '#s',
+                        '#' . LD . 'col ' . $column['tag'] . RD . '(.*?)' . LD . '/col' . RD . '#s',
                         $row,
                         $matches
                     );
 
-                    $data[$i][$column] = isset($matches[1]) ? trim($matches[1]) : '';
+                    $this->data[$i][$column['title']] = isset($matches[1]) ? trim($matches[1]) : '';
                 }
             }
 
-            ee()->TMPL->log_item('VZ Tabular: Found ' . count($data[0]) . ' columns: ' . implode(', ', array_keys($data[0])));
-            ee()->TMPL->log_item('VZ Tabular: Parsed ' . count($data) . ' rows of data');
+            ee()->TMPL->log_item('VZ Tabular: Found ' . count($columnTitles) . ' columns: ' . implode(', ', $columnTitles));
+            ee()->TMPL->log_item('VZ Tabular: Parsed ' . count($this->data) . ' rows of data');
 
-            return $data;
+            if (!is_array($this->data) OR count($this->data) < 1)
+            {
+                ee()->TMPL->log_item('ERROR: VZ Tabular could not parse the template.');
+                return false;
+            }
+
+            return true;
         }
 
         ee()->TMPL->log_item('VZ Tabular: No columns were detected in the template');
-
-        return FALSE;
+        return false;
     }
 
     /**
@@ -186,9 +220,9 @@ class Vz_tabular {
      */
     protected function sanitizeFilename($filename)
     {
-        $nonprinting = array_map('chr', range(0,31));
+        $nonprinting = array_map('chr', range(0, 31));
         $invalid_chars = array('<', '>', '?', '"', ':', '|', '\\', '/', '*', '&');
-        $all_invalids = array_merge($nonprinting,$invalid_chars);
+        $all_invalids = array_merge($nonprinting, $invalid_chars);
         return str_replace($all_invalids, '', $filename);
     }
 
