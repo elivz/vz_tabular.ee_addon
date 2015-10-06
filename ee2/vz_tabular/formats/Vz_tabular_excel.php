@@ -10,8 +10,6 @@
  * @link        http://elivz.com
  */
 
-use \XLSXWriter;
-
 class Vz_tabular_excel extends Vz_tabular_format
 {
 
