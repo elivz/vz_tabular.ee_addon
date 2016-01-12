@@ -13,7 +13,7 @@
 
 $plugin_info = array(
     'pi_name'         => 'VZ Tabular',
-    'pi_version'      => '1.0.1',
+    'pi_version'      => '1.0.2',
     'pi_author'       => 'Eli Van Zoeren',
     'pi_author_url'   => 'http://elivz.com/',
     'pi_description'  => 'Formats tabular data in a variety of ways',
@@ -112,6 +112,8 @@ class Vz_tabular
         {
             // Generate the output string
             $output = $this->export_format->output($this->data);
+            $output = ee()->TMPL->parse_globals($output);
+
             ee()->TMPL->log_item("VZ Tabular: Output generated");
 
             if ($filename)
