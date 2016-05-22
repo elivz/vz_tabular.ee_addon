@@ -8,7 +8,7 @@ Some possible use-cases include: creating a simple read-only API, endpoints for 
 Usage
 -----
 
-The tag pair should be wrapped around a looping tag, such as `channel:entries` or a Grid field. Within that loop, each column for output is wrapped in `{col Heading} ... {/col}`, with "Heading" being the title for that column. Depending on the output format, you can usually include spaces in the column heading (XML does not support spaces).
+The tag pair should be wrapped around a looping tag, such as `channel:entries` or a Grid field. Within that loop, each column for output is wrapped in `[col Heading] ... [/col]`, with "Heading" being the title for that column. Depending on the output format, you can usually include spaces in the column heading (XML does not support spaces).
 
 If you have problems getting the output you want, turn on Template Debugging. VZ Tabular outputs detailed information about its process, and any problems that occur.
 
@@ -16,9 +16,9 @@ If you have problems getting the output you want, turn on Template Debugging. VZ
 
     {exp:vz_tabular:csv}
         {exp:channel:entries channel="news" limit="10"}
-            {col Title}{title}{/col}
-            {col Publish Date}{entry_date format="%Y-%m-%d"}{/col}
-            {col Body}{body_text}{/col}
+            [col Title]{title}[/col]
+            [col Publish Date]{entry_date format="%Y-%m-%d"}[/col]
+            [col Body]{body_text}[/col]
         {/exp:channel:entries}
     {/exp:vz_tabular:csv}
 
@@ -146,6 +146,21 @@ Output Formats
 * `id` - Sets an ID on the table element. Default: none
 * `class` - Sets a class on the table element. Default: none
 
+Alternate Column Syntax
+-----------------------
+
+Previous versions of VZ Tabular used curly brackets for the `col` tags. That is still supported but the new, square bracket form is prefered. When curly brackets are used ExpressionEngine tries to parse the template before the plugin is run, causing much higher memory usage and out-of-memory errors in some cases.
+
+### Example of alternate syntax:
+
+    {exp:vz_tabular:csv}
+        {exp:channel:entries channel="news" limit="10"}
+            {col Title}{title}{/col}
+            {col Publish Date}{entry_date format="%Y-%m-%d"}{/col}
+            {col Body}{body_text}{/col}
+        {/exp:channel:entries}
+    {/exp:vz_tabular:csv}
+
 Support
 -------
 
@@ -157,3 +172,6 @@ Changelog
 ---------
 
 * __1.0.0__: Initial public release.
+* __1.0.1__: Fix bug in Excel output format.
+* __1.0.2__: Allow global variables to be used in CSV output.
+* __1.0.3__: Enable alternate column syntax using square brackets for better performance and lower memory usage. Deprecate previous curly-bracket syntax.

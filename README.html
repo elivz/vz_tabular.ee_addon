@@ -1018,14 +1018,14 @@ body .markdown-body
 <p>VZ Tabular is an ExpressionEngine plugin that provides a simple method to output tabular data from the templates. Five ouput formats are currently supported: <a href="#csv">CSV</a>, <a href="#json">JSON</a>, <a href="#xml">XML</a>, <a href="#html-table">HTML Table</a>, &amp; <a href="#excel">Excel</a>.</p>
 <p>Some possible use-cases include: creating a simple read-only API, endpoints for AJAX operations, and exporting data for transfer to another system. Get creative!</p>
 <h2 id="usage"><a name="user-content-usage" href="#usage" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Usage</h2>
-<p>The tag pair should be wrapped around a looping tag, such as <code>channel:entries</code> or a Grid field. Within that loop, each column for output is wrapped in <code>{col Heading} ... {/col}</code>, with &ldquo;Heading&rdquo; being the title for that column. Depending on the output format, you can usually include spaces in the column heading (XML does not support spaces).</p>
+<p>The tag pair should be wrapped around a looping tag, such as <code>channel:entries</code> or a Grid field. Within that loop, each column for output is wrapped in <code>[col Heading] ... [/col]</code>, with &ldquo;Heading&rdquo; being the title for that column. Depending on the output format, you can usually include spaces in the column heading (XML does not support spaces).</p>
 <p>If you have problems getting the output you want, turn on Template Debugging. VZ Tabular outputs detailed information about its process, and any problems that occur.</p>
 <h3 id="example"><a name="user-content-example" href="#example" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Example:</h3>
 <pre><code>{exp:vz_tabular:csv}
     {exp:channel:entries channel="news" limit="10"}
-        {col Title}{title}{/col}
-        {col Publish Date}{entry_date format="%Y-%m-%d"}{/col}
-        {col Body}{body_text}{/col}
+        [col Title]{title}[/col]
+        [col Publish Date]{entry_date format="%Y-%m-%d"}[/col]
+        [col Body]{body_text}[/col]
     {/exp:channel:entries}
 {/exp:vz_tabular:csv}
 </code></pre>
@@ -1066,7 +1066,7 @@ body .markdown-body
 <ul>
 <li><code>filename</code> - Downloads the output to the user&rsquo;s computer, rather than displaying it in the browser. Default: none</li>
 <li><code>stop_processing</code> - If this is set to <code>yes</code>, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: <code>no</code></li>
-<li><code>pretty</code> - Indent the JSON code for easier readability. Default: <code>no</code>.</li>
+<li><code>pretty</code> - Indent the JSON code for easier readability. <em>Requires PHP 5.4+</em>. Default: <code>no</code>.</li>
 </ul>
 <h3 id="xml"><a name="user-content-xml" href="#xml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>XML</h3>
 <pre><code>{exp:vz_tabular:xml} ... {/exp:vz_tabular:xml}
@@ -1094,7 +1094,7 @@ body .markdown-body
 <li><code>esc_html</code> - If this is set to <code>yes</code> any HTML code in the data will be escaped (i.e. <code>&lt;p&gt;Test&lt;/p&gt;</code> would become <code>&amp;lt;p&amp;gt;Test&amp;lt;/p&amp;gt;</code>). Otherwise the HTML tags will be left alone and will be wrapped in a CDATA block. Default: <code>no</code></li>
 <li><code>root</code> - Name of the root element that contains the array of items. Default: <code>root</code></li>
 <li><code>element</code> - Name of the elements representing each row. Default: <code>element</code></li>
-<li><code>pretty</code> - Indent the XML code for easier readability. <strong>Requires PHP 5.4+</strong>. Default: <code>no</code></li>
+<li><code>pretty</code> - Indent the XML code for easier readability. Default: <code>no</code></li>
 </ul>
 <h3 id="excel"><a name="user-content-excel" href="#excel" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Excel</h3>
 <pre><code>{exp:vz_tabular:excel filename="spreadsheet.xlsx"} ... {/exp:vz_tabular:excel}
@@ -1136,10 +1136,24 @@ body .markdown-body
 <li><code>id</code> - Sets an ID on the table element. Default: none</li>
 <li><code>class</code> - Sets a class on the table element. Default: none</li>
 </ul>
+<h2 id="alternate-column-syntax"><a name="user-content-alternate-column-syntax" href="#alternate-column-syntax" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Alternate Column Syntax</h2>
+<p>Previous versions of VZ Tabular used curly brackets for the <code>col</code> tags. That is still supported but the new, square bracket form is prefered. When curly brackets are used ExpressionEngine tries to parse the template before the plugin is run, causing much higher memory usage and out-of-memory errors in some cases.</p>
+<h3 id="example-of-alternate-syntax"><a name="user-content-example-of-alternate-syntax" href="#example-of-alternate-syntax" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Example of alternate syntax:</h3>
+<pre><code>{exp:vz_tabular:csv}
+    {exp:channel:entries channel="news" limit="10"}
+        {col Title}{title}{/col}
+        {col Publish Date}{entry_date format="%Y-%m-%d"}{/col}
+        {col Body}{body_text}{/col}
+    {/exp:channel:entries}
+{/exp:vz_tabular:csv}
+</code></pre>
 <h2 id="support"><a name="user-content-support" href="#support" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Support</h2>
 <p>Please post any questions or problems in the <a href="https://devot-ee.com/add-ons/support/vz-tabular/viewforum">Devot:ee support forum</a>.</p>
 <p>VZ Tabular uses a modular adapter system for output formats, so if there is another format that would be useful to you, please tell me! </p>
 <h2 id="changelog"><a name="user-content-changelog" href="#changelog" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Changelog</h2>
 <ul>
 <li><strong>1.0.0</strong>: Initial public release.</li>
+<li><strong>1.0.1</strong>: Fix bug in Excel output format.</li>
+<li><strong>1.0.2</strong>: Allow global variables to be used in CSV output.</li>
+<li><strong>1.0.3</strong>: Enable alternate column syntax using square brackets for better performance and lower memory usage. Deprecate previous curly-bracket syntax.</li>
 </ul></article></body></html>

@@ -1,23 +1,24 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "c6bd7538d0a43c6b9196505adf0db840",
+    "content-hash": "4a6482363227ffdd0c4317dc9ab0ab97",
     "packages": [
         {
             "name": "mk-j/php_xlsxwriter",
-            "version": "0.21",
+            "version": "0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mk-j/PHP_XLSXWriter.git",
-                "reference": "930a0f37914da6d1efe5a9b19d52e417c6952b68"
+                "reference": "45a0c7e1ea034bef9a6e9d594c3e8dc00ec069ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mk-j/PHP_XLSXWriter/zipball/930a0f37914da6d1efe5a9b19d52e417c6952b68",
-                "reference": "930a0f37914da6d1efe5a9b19d52e417c6952b68",
+                "url": "https://api.github.com/repos/mk-j/PHP_XLSXWriter/zipball/45a0c7e1ea034bef9a6e9d594c3e8dc00ec069ea",
+                "reference": "45a0c7e1ea034bef9a6e9d594c3e8dc00ec069ea",
                 "shasum": ""
             },
             "require-dev": {
@@ -42,7 +43,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2014-11-18 20:44:25"
+            "time": "2015-07-28 16:24:47"
         }
     ],
     "packages-dev": [],
@@ -50,6 +51,7 @@
     "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }

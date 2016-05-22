@@ -13,7 +13,7 @@
 
 $plugin_info = array(
     'pi_name'         => 'VZ Tabular',
-    'pi_version'      => '1.0.2',
+    'pi_version'      => '1.0.3',
     'pi_author'       => 'Eli Van Zoeren',
     'pi_author_url'   => 'http://elivz.com/',
     'pi_description'  => 'Formats tabular data in a variety of ways',
@@ -156,7 +156,7 @@ class Vz_tabular
     {
         // Get the column names
         preg_match_all(
-            '#' . LD . 'col ((.+?)( esc)?)' . RD . '.*?' . LD . '/col' . RD . '#s',
+            '#[' . LD . '\[]col ((.+?)( esc)?)[' . RD . '\]].*?[' . LD . '\[]/col[' . RD . '\]]#s',
             ee()->TMPL->tagdata,
             $matches
         );
@@ -177,6 +177,7 @@ class Vz_tabular
             // Split the template into rows
             $first_key = 'col ' . $columnTitles[0];
             ee()->TMPL->tagdata = str_replace(LD . $first_key, $uid . LD . $first_key, ee()->TMPL->tagdata);
+            ee()->TMPL->tagdata = str_replace('[' . $first_key, $uid . '[' . $first_key, ee()->TMPL->tagdata);
 
             // Get an array of rows, remove first element which will be empty
             $rows = explode($uid, ee()->TMPL->tagdata);
@@ -188,7 +189,7 @@ class Vz_tabular
                 foreach ($this->columns as $column)
                 {
                     preg_match(
-                        '#' . LD . 'col ' . $column['tag'] . RD . '(.*?)' . LD . '/col' . RD . '#s',
+                        '#[' . LD . '\[]col ' . $column['tag'] . '[' . RD . '\]](.*?)[' . LD . '\[]/col[' . RD . '\]]#s',
                         $row,
                         $matches
                     );

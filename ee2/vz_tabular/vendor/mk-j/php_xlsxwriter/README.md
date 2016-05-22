@@ -7,9 +7,7 @@ It is designed to output an Excel spreadsheet in with (Office 2007+) xlsx format
 * supports PHP 5.2.1+
 * takes UTF-8 encoded input
 * multiple worksheets
-* supports a few simple cell formats:
-  * simple $0.00 currency format 
-  * simple ``Y-M-D/Y-M-D H:m:s`` format
+* supports currency/date/numeric cell formatting, simple formulas
 
 Give this library a try, if you find yourself [running out of memory writing spreadsheets with PHPExcel](http://www.zedwood.com/article/php_xlsxwriter-performance-comparison).
 
@@ -39,23 +37,25 @@ $data2 = array(
 
 $writer = new XLSXWriter();
 $writer->setAuthor('Doc Author');
-$writer->writeSheet($data1);
-$writer->writeSheet($data2);
+$writer->writeSheet($data1,'Sheet1');
+$writer->writeSheet($data2,'Sheet2');
 echo $writer->writeToString();
 ```
 
-Cell Formatting:
+Simple/Advanced Cell Formats:
 ```php
+//simple formats: date, datetime, integer, dollar, euro, string
 $header = array(
-  'create_date'=>'date',
-  'quantity'=>'string',
-  'product_id'=>'string',
-  'amount'=>'money',
+  'created'=>'date',
+  'product_id'=>'integer',
+  'quantity'=>'#,##0',
+  'amount'=>'dollar',
   'description'=>'string',
+  'tax'=>'[$$-1009]#,##0.00;[RED]-[$$-1009]#,##0.00',
 );
 $data = array(
-    array('2013-01-01',1,27,'44.00','twig'),
-    array('2013-01-05',1,'=C1','-44.00','refund'),
+    array('2015-01-01',873,1,'44.00','misc','=D2*0.05'),
+    array('2015-01-12',324,2,'88.00','none','=D3*0.05'),
 );
 
 $writer = new XLSXWriter();
