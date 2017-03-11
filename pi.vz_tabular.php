@@ -61,7 +61,7 @@ class Vz_tabular
 
         // Load formats base class
         $this->formats_path = PATH_THIRD . 'vz_tabular/formats/';
-        require_once $this->formats_path . 'Vz_tabular_format' . EXT;
+        require_once $this->formats_path . 'Vz_tabular_format.php';
 
         ee()->TMPL->log_item('VZ Tabular: Initialized');
     }
@@ -84,7 +84,7 @@ class Vz_tabular
 
         // Include the export format class
         $export_format = 'Vz_tabular_' . $name;
-        $format_file = $this->formats_path . $export_format . EXT;
+        $format_file = $this->formats_path . $export_format . '.php';
 
         if (!file_exists($format_file)) {
             ee()->TMPL->log_item('ERROR: VZ Tabular does not support ' . $name . ' format');

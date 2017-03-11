@@ -175,3 +175,4 @@ Changelog
 * __1.0.1__: Fix bug in Excel output format.
 * __1.0.2__: Allow global variables to be used in CSV output.
 * __1.0.3__: Enable alternate column syntax using square brackets for better performance and lower memory usage. Deprecate previous curly-bracket syntax.
+* __1.1.0__: Supports ExpressionEngine 3. Rearranged file structure in download.
