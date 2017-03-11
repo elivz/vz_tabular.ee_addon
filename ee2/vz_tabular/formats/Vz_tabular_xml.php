@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * VZ Tabular XML export format
@@ -10,11 +10,8 @@
  * @link        http://elivz.com
  */
 
-use \DomDocument;
-
 class Vz_tabular_xml extends Vz_tabular_format
 {
-
     public $name = 'XML';
 
     // 'parameter' => 'default'
@@ -39,18 +36,13 @@ class Vz_tabular_xml extends Vz_tabular_format
         $xml = new DomDocument('1.0', 'UTF-8');
         $root = $xml->createElement($this->params['root']);
 
-        foreach ($data as $row)
-        {
+        foreach ($data as $row) {
             $item = $xml->createElement($this->params['element']);
 
-            foreach ($row as $column => $value)
-            {
-                if ($this->params['esc_html'] == 'yes')
-                {
+            foreach ($row as $column => $value) {
+                if ($this->params['esc_html'] == 'yes') {
                     $content = $xml->createTextNode($value);
-                }
-                else
-                {
+                } else {
                     $content = $xml->createCDATASection($value);
                 }
 
@@ -64,13 +56,11 @@ class Vz_tabular_xml extends Vz_tabular_format
 
         $xml->appendChild($root);
 
-        if ($this->params['pretty'] == 'yes')
-        {
+        if ($this->params['pretty'] == 'yes') {
             // Add indentation
-            $xml->formatOutput = TRUE;
+            $xml->formatOutput = true;
         }
 
         return $xml->saveXML();
     }
-
 }

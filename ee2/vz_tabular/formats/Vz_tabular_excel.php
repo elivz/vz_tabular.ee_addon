@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * VZ Tabular XML export format
@@ -36,14 +36,12 @@ class Vz_tabular_excel extends Vz_tabular_format
 
         // Generate the header row
         $headers = array();
-        foreach (array_keys($data[0]) as $cell)
-        {
+        foreach (array_keys($data[0]) as $cell) {
             $headers[$cell] = 'string';
         }
 
         // Write each row of data to the file
-        foreach ($data as $key => $row)
-        {
+        foreach ($data as $key => $row) {
             $data[$key] = array_values($row);
         }
 

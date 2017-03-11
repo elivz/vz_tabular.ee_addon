@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * VZ Tabular HTML Table export format
@@ -10,11 +10,8 @@
  * @link        http://elivz.com
  */
 
-use \DomDocument;
-
 class Vz_tabular_table extends Vz_tabular_format
 {
-
     public $name = 'HTML Table';
 
     public $output = array('browser');
@@ -24,8 +21,8 @@ class Vz_tabular_table extends Vz_tabular_format
         'esc_html' => 'no',
         'tab'      => '    ',
         'headers'  => 'yes',
-        'id'       => FALSE,
-        'class'    => FALSE,
+        'id'       => false,
+        'class'    => false,
     );
 
 
@@ -45,12 +42,10 @@ class Vz_tabular_table extends Vz_tabular_format
         $table_attrs .= $this->params['class'] ? ' class="' . $this->params['class'] . '"' : '';
         $html = '<table' . $table_attrs . '>' . NL;
 
-        if ($this->params['headers'] == 'yes')
-        {
+        if ($this->params['headers'] == 'yes') {
             $html .= $tab . '<thead><tr>' . NL;
 
-            foreach (array_keys($data[0]) as $column)
-            {
+            foreach (array_keys($data[0]) as $column) {
                 $html .= $tab . $tab . '<th>' . $column . '</th>' . NL;
             }
 
@@ -59,18 +54,13 @@ class Vz_tabular_table extends Vz_tabular_format
 
         $html .= $tab .  '<tbody' . NL;
 
-        foreach ($data as $row)
-        {
+        foreach ($data as $row) {
             $html .= $tab . $tab. '<tr>' . NL;
 
-            foreach ($row as $column => $value)
-            {
-                if ($this->params['esc_html'] == 'yes')
-                {
+            foreach ($row as $column => $value) {
+                if ($this->params['esc_html'] == 'yes') {
                     $html .= $tab . $tab . $tab . '<td>' . htmlspecialchars($value) . '</td>' . NL;
-                }
-                else
-                {
+                } else {
                     $html .= $tab . $tab . $tab . '<td>' . $value . '</td>' . NL;
                 }
             }
@@ -83,5 +73,4 @@ class Vz_tabular_table extends Vz_tabular_format
 
         return $html;
     }
-
 }

@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Base class for file export formats
@@ -21,8 +21,7 @@ abstract class Vz_tabular_format
     public function __construct()
     {
         // Retrieve tag parameters
-        foreach ($this->params as $param => $default)
-        {
+        foreach ($this->params as $param => $default) {
             $this->params[$param] = ee()->TMPL->fetch_param($param, $default);
         }
     }
@@ -47,5 +46,4 @@ abstract class Vz_tabular_format
      * @abstract
      */
     abstract public function output($data);
-
 }

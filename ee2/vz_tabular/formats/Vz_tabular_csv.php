@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * VZ Tabular CSV export format
@@ -12,7 +12,6 @@
 
 class Vz_tabular_csv extends Vz_tabular_format
 {
-
     public $name = 'CSV';
 
     // 'parameter' => 'default'
@@ -36,8 +35,7 @@ class Vz_tabular_csv extends Vz_tabular_format
         fputcsv($stream, array_keys($data[0]), $this->params['delimiter'], $this->params['enclosure']);
 
         // Output the data rows
-        foreach ($data as $row)
-        {
+        foreach ($data as $row) {
             fputcsv($stream, $row, $this->params['delimiter'], $this->params['enclosure']);
         }
 
@@ -48,5 +46,4 @@ class Vz_tabular_csv extends Vz_tabular_format
 
         return $output;
     }
-
 }

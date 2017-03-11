@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * VZ Tabular JSON export format
@@ -12,7 +12,6 @@
 
 class Vz_tabular_json extends Vz_tabular_format
 {
-
     public $name = 'JSON';
 
     // 'parameter' => 'default'
@@ -30,10 +29,9 @@ class Vz_tabular_json extends Vz_tabular_format
      */
     public function output($data)
     {
-        $json_options = $this->params['pretty'] == 'yes' ? JSON_PRETTY_PRINT : NULL;
+        $json_options = $this->params['pretty'] == 'yes' ? JSON_PRETTY_PRINT : null;
 
         $output = json_encode($data, $json_options);
         return $output;
     }
-
 }
