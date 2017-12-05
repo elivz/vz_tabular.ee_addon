@@ -40,7 +40,7 @@ class Vz_tabular_xml extends Vz_tabular_format
             $item = $xml->createElement($this->params['element']);
 
             foreach ($row as $column => $value) {
-                if ($this->params['esc_html'] == 'yes') {
+                if ($this->params['esc_html'] == 'yes' || is_numeric($value)) {
                     $content = $xml->createTextNode($value);
                 } else {
                     $content = $xml->createCDATASection($value);

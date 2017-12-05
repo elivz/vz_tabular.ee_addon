@@ -181,7 +181,14 @@ class Vz_tabular
                         $matches
                     );
 
-                    $this->data[$i][$column['title']] = isset($matches[1]) ? trim($matches[1]) : '';
+                    $value = isset($matches[1]) ? trim($matches[1]) : '';
+                    if (is_numeric($value)) {
+                        // Cast number values to actual numbers, to prevent uncessary
+                        // quotation in JSON format
+                        settype($value, 'float');
+                    }
+
+                    $this->data[$i][$column['title']] = $value;
                 }
             }
 
