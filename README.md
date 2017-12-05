@@ -111,6 +111,8 @@ Output Formats
 * `filename` - *(Required)* Specify the name of the file that is created. The file should have an `.xlsx` extension. Default: none
 * `sheet` - Name of the worksheet. Default: `Sheet1`
 
+Please note that the Excel output option requires PHP to be compiled with [Zip support enabled](http://php.net/manual/en/zip.installation.php).
+
 
 ### HTML Table
 

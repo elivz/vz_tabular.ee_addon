@@ -1,17 +1,17 @@
 [
     {
         "name": "mk-j/php_xlsxwriter",
-        "version": "0.32",
-        "version_normalized": "0.32.0.0",
+        "version": "0.35",
+        "version_normalized": "0.35.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/mk-j/PHP_XLSXWriter.git",
-            "reference": "94d5bb017b7fd3f3334309fba84de9b04ff0e07d"
+            "reference": "34188d1aefe34a9c6bb8d9236615c47f3701dcc8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/mk-j/PHP_XLSXWriter/zipball/94d5bb017b7fd3f3334309fba84de9b04ff0e07d",
-            "reference": "94d5bb017b7fd3f3334309fba84de9b04ff0e07d",
+            "url": "https://api.github.com/repos/mk-j/PHP_XLSXWriter/zipball/34188d1aefe34a9c6bb8d9236615c47f3701dcc8",
+            "reference": "34188d1aefe34a9c6bb8d9236615c47f3701dcc8",
             "shasum": ""
         },
         "require": {
@@ -21,7 +21,7 @@
         "require-dev": {
             "phpunit/phpunit": "4.3.*"
         },
-        "time": "2017-03-09T16:25:31+00:00",
+        "time": "2017-08-23T16:10:46+00:00",
         "type": "project",
         "installation-source": "dist",
         "autoload": {
