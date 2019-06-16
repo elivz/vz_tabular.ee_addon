@@ -1,13 +1,15 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) { 
+    exit('No direct script access allowed');
+}
 
 /**
  * VZ Tabular CSV export format
  *
- * @package     ExpressionEngine
- * @subpackage  Addons
- * @category    VZ Tabular Export Format
- * @author      Eli Van Zoeren
- * @link        http://elivz.com
+ * @package    ExpressionEngine
+ * @subpackage Addons
+ * @category   VZ Tabular Export Format
+ * @author     Eli Van Zoeren
+ * @link       http://elivz.com
  */
 
 class Vz_tabular_csv extends Vz_tabular_format
@@ -24,7 +26,7 @@ class Vz_tabular_csv extends Vz_tabular_format
      * Convert the associative array into a string containing CSV data
      *
      * @access public
-     * @param array      $data Associative array of parsed data
+     * @param  array $data Associative array of parsed data
      * @return string
      */
     public function output($data)

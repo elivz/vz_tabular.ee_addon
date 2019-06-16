@@ -1,13 +1,15 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) { 
+    exit('No direct script access allowed');
+}
 
 /**
  * Base class for file export formats
  *
- * @package     ExpressionEngine
- * @subpackage  Addons
- * @category    VZ Tabular Export Format
- * @author      Eli Van Zoeren
- * @link        http://elivz.com
+ * @package    ExpressionEngine
+ * @subpackage Addons
+ * @category   VZ Tabular Export Format
+ * @author     Eli Van Zoeren
+ * @link       http://elivz.com
  */
 
 abstract class Vz_tabular_format
@@ -31,7 +33,7 @@ abstract class Vz_tabular_format
      * Determines if a particular output method is valid for this format
      *
      * @access public
-     * @param string  $output Output method to test
+     * @param  string $output Output method to test
      * @return bool
      */
     public function supportsOutput($output)
