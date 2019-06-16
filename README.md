@@ -1,16 +1,20 @@
-VZ Tabluar
-==========
+# VZ Tabluar
 
 VZ Tabular is an ExpressionEngine plugin that provides a simple method to output tabular data from the templates. Five ouput formats are currently supported: [CSV](#csv), [JSON](#json), [XML](#xml), [HTML Table](#html-table), & [Excel](#excel).
 
 Some possible use-cases include: creating a simple read-only API, endpoints for AJAX operations, and exporting data for transfer to another system. Get creative!
 
-Usage
------
+## Usage
 
 The tag pair should be wrapped around a looping tag, such as `channel:entries` or a Grid field. Within that loop, each column for output is wrapped in `[col Heading] ... [/col]`, with "Heading" being the title for that column. Depending on the output format, you can usually include spaces in the column heading (XML does not support spaces).
 
 If you have problems getting the output you want, turn on Template Debugging. VZ Tabular outputs detailed information about its process, and any problems that occur.
+
+### Column modifiers
+
+#### `decode`
+
+You may include an optional `decode` parameter immediately after the column heaading. This will run [html_entity_decode](https://www.php.net/manual/en/function.html-entity-decode.php) on the column value, converting, e.g. `&amp;` to `&`. ExpressionEngine automatically converts special characters to HTML entities in the title field and any field set to "Auto XHTML" formatting. If your output target is not a webpage, you will probably prefer the actual character versus the encoded entity. (Note that the XML output format has an option to re-encode the characters, which will take precedence over this.)
 
 ### Example:
 
@@ -22,13 +26,13 @@ If you have problems getting the output you want, turn on Template Debugging. VZ
         {/exp:channel:entries}
     {/exp:vz_tabular:csv}
 
-
-Output Formats
---------------
+## Output Formats
 
 ### CSV
 
-    {exp:vz_tabular:csv} ... {/exp:vz_tabular:csv}
+    {exp:vz_tabular:csv}
+        ...
+    {/exp:vz_tabular:csv}
 
 #### Sample Output
 
@@ -38,15 +42,16 @@ Output Formats
 
 #### Parameters
 
-* `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
-* `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
-* `delimiter` - Default: `,`.
-* `enclosure` - Default: `"`.
-
+- `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
+- `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
+- `delimiter` - Default: `,`.
+- `enclosure` - Default: `"`.
 
 ### JSON
 
-    {exp:vz_tabular:json pretty="yes"} ... {/exp:vz_tabular:json}
+    {exp:vz_tabular:json pretty="yes"}
+        ...
+    {/exp:vz_tabular:json}
 
 #### Sample Output
 
@@ -65,14 +70,15 @@ Output Formats
 
 #### Parameters
 
-* `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
-* `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
-* `pretty` - Indent the JSON code for easier readability. *Requires PHP 5.4+*. Default: `no`.
-
+- `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
+- `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
+- `pretty` - Indent the JSON code for easier readability. _Requires PHP 5.4+_. Default: `no`.
 
 ### XML
 
-    {exp:vz_tabular:xml} ... {/exp:vz_tabular:xml}
+    {exp:vz_tabular:xml}
+        ...
+    {/exp:vz_tabular:xml}
 
 #### Sample Output
 
@@ -90,33 +96,35 @@ Output Formats
       </element>
     </root>
 
-*Note:* XML does not support spaces in tags, so they are automatically replaced with an underscore.
+_Note:_ XML does not support spaces in tags, so they are automatically replaced with an underscore.
 
 #### Parameters
 
-* `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
-* `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
-* `esc_html` - If this is set to `yes` any HTML code in the data will be escaped (i.e. `<p>Test</p>` would become `&lt;p&gt;Test&lt;/p&gt;`). Otherwise the HTML tags will be left alone and will be wrapped in a CDATA block. Default: `no`
-* `root` - Name of the root element that contains the array of items. Default: `root`
-* `element` - Name of the elements representing each row. Default: `element`
-* `pretty` - Indent the XML code for easier readability. Default: `no`
-
+- `filename` - Downloads the output to the user's computer, rather than displaying it in the browser. Default: none
+- `stop_processing` - If this is set to `yes`, no further template processing will occur after the plugin runs. This is useful if you are creating a data-feed and want to ensure that no template debugging info is included on the page. Default: `no`
+- `esc_html` - If this is set to `yes` any HTML code in the data will be escaped (i.e. `<p>Test</p>` would become `&lt;p&gt;Test&lt;/p&gt;`). Otherwise the HTML tags will be left alone and will be wrapped in a CDATA block. Default: `no`
+- `root` - Name of the root element that contains the array of items. Default: `root`
+- `element` - Name of the elements representing each row. Default: `element`
+- `pretty` - Indent the XML code for easier readability. Default: `no`
 
 ### Excel
 
-    {exp:vz_tabular:excel filename="spreadsheet.xlsx"} ... {/exp:vz_tabular:excel}
+    {exp:vz_tabular:excel filename="spreadsheet.xlsx"} .
+        ..
+    {/exp:vz_tabular:excel}
 
 #### Parameters
 
-* `filename` - *(Required)* Specify the name of the file that is created. The file should have an `.xlsx` extension. Default: none
-* `sheet` - Name of the worksheet. Default: `Sheet1`
+- `filename` - _(Required)_ Specify the name of the file that is created. The file should have an `.xlsx` extension. Default: none
+- `sheet` - Name of the worksheet. Default: `Sheet1`
 
 Please note that the Excel output option requires PHP to be compiled with [Zip support enabled](http://php.net/manual/en/zip.installation.php).
 
-
 ### HTML Table
 
-    {exp:vz_tabular:table} ... {/exp:vz_tabular:table}
+    {exp:vz_tabular:table}
+        ...
+    {/exp:vz_tabular:table}
 
 #### Sample Output
 
@@ -142,14 +150,13 @@ Please note that the Excel output option requires PHP to be compiled with [Zip s
 
 #### Parameters
 
-* `esc_html` - If this is set to `yes`, any HTML tags in the content will be escaped so the tags display on-screen. Otherwise they will be left alone to render normally. Default: `no`
-* `tab` - String to use for indenting the HTML. Set to nothing (`tab=""`) for no indentation. Default: four spaces
-* `headers` - Include a header row with the column names. Default: `yes`
-* `id` - Sets an ID on the table element. Default: none
-* `class` - Sets a class on the table element. Default: none
+- `esc_html` - If this is set to `yes`, any HTML tags in the content will be escaped so the tags display on-screen. Otherwise they will be left alone to render normally. Default: `no`
+- `tab` - String to use for indenting the HTML. Set to nothing (`tab=""`) for no indentation. Default: four spaces
+- `headers` - Include a header row with the column names. Default: `yes`
+- `id` - Sets an ID on the table element. Default: none
+- `class` - Sets a class on the table element. Default: none
 
-Alternate Column Syntax
------------------------
+## Alternate Column Syntax
 
 Previous versions of VZ Tabular used curly brackets for the `col` tags. That is still supported but the new, square bracket form is prefered. When curly brackets are used ExpressionEngine tries to parse the template before the plugin is run, causing much higher memory usage and out-of-memory errors in some cases.
 
@@ -163,18 +170,16 @@ Previous versions of VZ Tabular used curly brackets for the `col` tags. That is 
         {/exp:channel:entries}
     {/exp:vz_tabular:csv}
 
-Support
--------
+## Support
 
 Please post any questions or problems in the [Devot:ee support forum](https://devot-ee.com/add-ons/support/vz-tabular/viewforum).
 
-VZ Tabular uses a modular adapter system for output formats, so if there is another format that would be useful to you, please tell me! 
+VZ Tabular uses a modular adapter system for output formats, so if there is another format that would be useful to you, please tell me!
 
-Changelog
----------
+## Changelog
 
-* __1.0.0__: Initial public release.
-* __1.0.1__: Fix bug in Excel output format.
-* __1.0.2__: Allow global variables to be used in CSV output.
-* __1.0.3__: Enable alternate column syntax using square brackets for better performance and lower memory usage. Deprecate previous curly-bracket syntax.
-* __1.1.0__: Supports ExpressionEngine 3. Rearranged file structure in download.
+- **1.0.0**: Initial public release.
+- **1.0.1**: Fix bug in Excel output format.
+- **1.0.2**: Allow global variables to be used in CSV output.
+- **1.0.3**: Enable alternate column syntax using square brackets for better performance and lower memory usage. Deprecate previous curly-bracket syntax.
+- **1.1.0**: Supports ExpressionEngine 3. Rearranged file structure in download.

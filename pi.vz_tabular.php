@@ -1,13 +1,14 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) { exit('No direct script access allowed');
+}
 
 /**
  * VZ Tabular Plugin
  *
- * @package     ExpressionEngine
- * @subpackage  Addons
- * @category    Plugin
- * @author      Eli Van Zoeren
- * @link        http://elivz.com
+ * @package    ExpressionEngine
+ * @subpackage Addons
+ * @category   Plugin
+ * @author     Eli Van Zoeren
+ * @link       http://elivz.com
  */
 
 
@@ -25,12 +26,14 @@ class Vz_tabular
 {
     /**
      * Template output
+     *
      * @var string
      */
     public $return_data;
 
     /**
      * Server path where output formats are stored
+     *
      * @var string
      */
     protected $formats_path;
@@ -38,14 +41,16 @@ class Vz_tabular
     /**
      * Array of column data
      * array(
-     *     array('title' => '', 'esc' => false)
+     *     array('title' => '', 'enc' => false)
      * )
+     *
      * @var array
      */
     protected $columns = array();
 
     /**
      * Two-dimensional array of parsed data
+     *
      * @var array
      */
     protected $data = array();
@@ -57,11 +62,11 @@ class Vz_tabular
     public function __construct()
     {
         // Require Composer's autoloader
-        require_once 'vendor/autoload.php';
+        include_once 'vendor/autoload.php';
 
         // Load formats base class
         $this->formats_path = PATH_THIRD . 'vz_tabular/formats/';
-        require_once $this->formats_path . 'Vz_tabular_format.php';
+        include_once $this->formats_path . 'Vz_tabular_format.php';
 
         ee()->TMPL->log_item('VZ Tabular: Initialized');
     }
@@ -72,8 +77,8 @@ class Vz_tabular
      * Uses magic function to allow new formats to be easily added
      *
      * @access public
-     * @param string     $name The method name being called
-     * @param array      $arguments The method call arguments
+     * @param  string $name      The method name being called
+     * @param  array  $arguments The method call arguments
      * @return void
      */
     public function __call($name, $arguments)
@@ -91,7 +96,7 @@ class Vz_tabular
             return;
         }
 
-        require_once $format_file;
+        include_once $format_file;
         $this->export_format = new $export_format;
         ee()->TMPL->log_item('VZ Tabular: Exporting to ' . $this->export_format->name);
 
@@ -145,9 +150,12 @@ class Vz_tabular
      */
     protected function parseDataArray()
     {
+        ee()->load->library('typography');
+        ee()->typography->initialize();
+
         // Get the column names
         preg_match_all(
-            '#[' . LD . '\[]col ((.+?)( esc)?)[' . RD . '\]].*?[' . LD . '\[]/col[' . RD . '\]]#s',
+            '#[' . LD . '\[]col ((.+?)( decode)?)[' . RD . '\]].*?[' . LD . '\[]/col[' . RD . '\]]#s',
             ee()->TMPL->tagdata,
             $matches
         );
@@ -156,7 +164,7 @@ class Vz_tabular
         foreach ($columnTitles as $key => $column) {
             $this->columns[$key]['tag'] = $matches[1][$key];
             $this->columns[$key]['title'] = $column;
-            $this->columns[$key]['esc'] = $matches[3][$key] !== '';
+            $this->columns[$key]['decode'] = !empty($matches[3][$key]);
         }
 
         if (!empty($columnTitles)) {
@@ -182,10 +190,16 @@ class Vz_tabular
                     );
 
                     $value = isset($matches[1]) ? trim($matches[1]) : '';
+
+                    // Cast number values to actual numbers, to prevent uncessary
+                    // quotation in JSON format
                     if (is_numeric($value)) {
-                        // Cast number values to actual numbers, to prevent uncessary
-                        // quotation in JSON format
                         settype($value, 'float');
+                    }
+
+                    // Decode HTML entities in the title
+                    if ($column['decode']) {
+                        $value = html_entity_decode($value);
                     }
 
                     $this->data[$i][$column['title']] = $value;
@@ -211,7 +225,7 @@ class Vz_tabular
      * Remove illegal characters from the filename
      *
      * @access protected
-     * @param string     $filename Filename to sanitize
+     * @param  string $filename Filename to sanitize
      * @return string
      */
     protected function sanitizeFilename($filename)
@@ -227,8 +241,8 @@ class Vz_tabular
      *
      * This function describes how the plugin is used.
      *
-     * @access  public
-     * @return  string
+     * @access public
+     * @return string
      */
     public static function usage()
     {
@@ -236,7 +250,7 @@ class Vz_tabular
 
 See: https://devot-ee.com/add-ons/vz-tabular
 
-    <?php
+        <?php
         $buffer = ob_get_contents();
         ob_end_clean();
 
