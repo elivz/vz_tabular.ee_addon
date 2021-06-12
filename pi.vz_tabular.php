@@ -15,7 +15,7 @@
 
 $plugin_info = array(
     'pi_name'         => 'VZ Tabular',
-    'pi_version'      => '1.2.0',
+    'pi_version'      => '1.3.0',
     'pi_author'       => 'Eli Van Zoeren',
     'pi_author_url'   => 'http://elivz.com/',
     'pi_description'  => 'Formats tabular data in a variety of ways',

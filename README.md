@@ -20,7 +20,7 @@ You may include an optional `decode` parameter immediately after the column heaa
 
     {exp:vz_tabular:csv}
         {exp:channel:entries channel="news" limit="10"}
-            [col Title]{title}[/col]
+            [col Title decode]{title}[/col]
             [col Publish Date]{entry_date format="%Y-%m-%d"}[/col]
             [col Body]{body_text}[/col]
         {/exp:channel:entries}
