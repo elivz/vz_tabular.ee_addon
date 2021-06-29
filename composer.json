@@ -1,5 +1,5 @@
 {
     "require": {
-        "mk-j/php_xlsxwriter": "~0.21"
+        "mk-j/php_xlsxwriter": "~0.38"
     }
 }
