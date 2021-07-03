@@ -13,6 +13,6 @@ return array(
     'author_url'  => 'http://elivz.com',
     'name'        => 'VZ Tabular',
     'description' => 'Formats tabular data in a variety of ways.',
-    'version'     => '1.3.0',
+    'version'     => '1.3.1',
     'namespace'   => 'Vz\Tabular'
 );

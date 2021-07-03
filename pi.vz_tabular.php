@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) { 
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -15,7 +15,7 @@
 
 $plugin_info = array(
     'pi_name'         => 'VZ Tabular',
-    'pi_version'      => '1.3.0',
+    'pi_version'      => '1.3.1',
     'pi_author'       => 'Eli Van Zoeren',
     'pi_author_url'   => 'http://elivz.com/',
     'pi_description'  => 'Formats tabular data in a variety of ways',
